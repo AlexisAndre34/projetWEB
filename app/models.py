@@ -3,10 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 class Account(models.Model):
-    idAccount = models.OneToOneField(User, on_delete=models.CASCADE)
-    lastName = models.CharField(max_length=42)
-    firstName = models.CharField(max_length=42)
-    email = models.EmailField()
+    idAccount = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     birthDate = models.DateField()
 
     DEPARTMENT_CHOICES= (
@@ -24,38 +21,42 @@ class Account(models.Model):
     department = models.CharField(max_length=12, choices=DEPARTMENT_CHOICES)
 
     YEAR_IN_SCHOOL_CHOICES = (
-        ('A1', '1er année'),
-        ('A2', '2nd année'),
-        ('A3', '3eme année'),
-        ('A4', '4eme année'),
-        ('A5', '5eme année'),
+        ('3', '3'),
+        ('4', '4'),
+        ('5', '5'),
     )
-    year_in_school = models.CharField(max_length=12, choices=YEAR_IN_SCHOOL_CHOICES)
+    year_in_school = models.CharField(max_length=4, choices=YEAR_IN_SCHOOL_CHOICES)
 
     githubLink = models.URLField(max_length=200, null=True, blank=True)
-    linkedInLink = models.CharField(max_length=200, null=True, blank=True)
+    linkedInLink = models.URLField(max_length=200, null=True, blank=True)
+
+
+
+
+
+class Group(models.Model):
+    idGroup = models.AutoField(primary_key=True)
+    nameGroup = models.CharField(max_length=42, unique=True)
+    idAccountGroup = models.ForeignKey(Account, on_delete=models.CASCADE)
 
 class Category(models.Model):
     idCat = models.AutoField(primary_key=True)
-    NameCat = models.CharField(max_length=42)
+    nameCat = models.CharField(max_length=42)
+    groupCat = models.ForeignKey(Group, on_delete=models.CASCADE, null=True)
 
 class Publication(models.Model):
     #AutoField auto increment ID
     idPubli = models.AutoField(primary_key=True)
-    TitlePubli = models.CharField(max_length=42)
+    titlePubli = models.CharField(max_length=42)
     ContentPubli = models.TextField(max_length=420)
     datePublished = models.DateTimeField(default=timezone.now)
     idAccountPubli = models.ForeignKey(Account, on_delete=models.CASCADE,) #User au lieu de Account ?
     idCatPubli = models.ForeignKey(Category, on_delete=models.CASCADE)
 
-class Group(models.Model):
-    idGroup = models.AutoField(primary_key=True)
-    NameGroup = models.CharField(max_length=42)
-
 
 class File(models.Model):
     idFile = models.AutoField(primary_key=True)
-    NameFile = models.CharField(max_length=100)
+    nameFile = models.CharField(max_length=100)
     fileFile = models.FileField(upload_to='file/', max_length=100) #add where it should be upload
     idPubliFile = models.ForeignKey(Publication, on_delete=models.CASCADE)
 
@@ -70,7 +71,8 @@ class Belong(models.Model):
     idGroupB = models.ForeignKey(Group, on_delete=models.CASCADE)
     joinDate = models.DateTimeField(default=timezone.now)
 
-class Manage(models.Model):
-    idAccountB = models.ForeignKey(Account, on_delete=models.CASCADE)
-    idGroupB = models.ForeignKey(Group, on_delete=models.CASCADE)
+class Join(models.Model):
+    idAccountJ = models.ForeignKey(Account, on_delete=models.CASCADE)
+    idGroupJ = models.ForeignKey(Group, on_delete=models.CASCADE)
+
 

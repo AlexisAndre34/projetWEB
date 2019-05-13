@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="container" >
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg">
+            <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
+                <img class="card-img-top" src="https://polytech.wave-it.fr/content/img/spe/thumb/IG.png" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Planning:{{ account.department }}</h5>
+                    <p id="size_text_card"; class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg">
+            <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
+                <img class="card-img-top" src="https://polytech.wave-it.fr/content/img/spe/thumb/IG.png" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p id="size_text_card"; class="card-text">Some quick exthef the card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-2">
+        </div>
+        <div class="col-lg">
+            <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
+                <img class="card-img-top" src="https://polytech.wave-it.fr/content/img/spe/thumb/IG.png" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p id="size_text_card"; class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg">
+            <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
+                <img class="card-img-top" src="https://polytech.wave-it.fr/content/img/spe/thumb/IG.png" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p id="size_text_card"; class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2">
+        </div>
+    </div>
+</div>
+{% else %}
+<h1>ça marche</h1>
+{% endif %}
+{% endblock %} 

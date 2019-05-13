@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+    {% block content%}
+    <div id="container" class="container">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3 text-center"><br>
+                <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div>
+                    {{field.label_tag}}<br>
+                    {{field}}<br>
+                    </div>
+                {% endfor %}
+                <div id="button_connexion">
+                <button type="submit" class="btn btn-primary">Connexion</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html'%}
+
+
+{% block content %}
+
+<div class="container">
+    <div>
+        <h5>vous êtes dans {{ groupList|length }} groupes</h5>
+    </div>
+    {% for group in groupList%}
+    
+    <div class="card" style="width: 18rem;">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">{{ group.nameGroup }}</li>
+        </ul>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

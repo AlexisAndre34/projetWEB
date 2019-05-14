@@ -37,12 +37,12 @@ class Account(models.Model):
 class Group(models.Model):
     idGroup = models.AutoField(primary_key=True)
     nameGroup = models.CharField(max_length=42, unique=True)
-    idAccountGroup = models.ForeignKey(Account, on_delete=models.CASCADE)
+    idAccountGroup = models.ForeignKey(Account, on_delete=models.CASCADE, db_column='idAccountGroup')
 
 class Category(models.Model):
     idCat = models.AutoField(primary_key=True)
     nameCat = models.CharField(max_length=42)
-    groupCat = models.ForeignKey(Group, on_delete=models.CASCADE, null=True)
+    groupCat = models.ForeignKey(Group, on_delete=models.CASCADE, null=True, db_column='groupCat')
 
 class Publication(models.Model):
     #AutoField auto increment ID
@@ -50,29 +50,23 @@ class Publication(models.Model):
     titlePubli = models.CharField(max_length=42)
     ContentPubli = models.TextField(max_length=420)
     datePublished = models.DateTimeField(default=timezone.now)
-    idAccountPubli = models.ForeignKey(Account, on_delete=models.CASCADE,) #User au lieu de Account ?
-    idCatPubli = models.ForeignKey(Category, on_delete=models.CASCADE)
-
-
-class File(models.Model):
-    idFile = models.AutoField(primary_key=True)
-    nameFile = models.CharField(max_length=100)
-    fileFile = models.FileField(upload_to='file/', max_length=100) #add where it should be upload
-    idPubliFile = models.ForeignKey(Publication, on_delete=models.CASCADE)
+    idAccountPubli = models.ForeignKey(Account, on_delete=models.CASCADE, db_column='idAccountPubli') #User au lieu de Account ?
+    idCatPubli = models.ForeignKey(Category, on_delete=models.CASCADE, db_column='idCatPubli')
+    idGroupPubli = models.ForeignKey(Group, on_delete=models.CASCADE, db_column='idGroupPubli', null=True) #django force to allow null or put a default value because it's a non-nullable field (Group)
 
 class Comment(models.Model):
-    idAccountC = models.ForeignKey(Account, on_delete=models.CASCADE)
-    idPubliC = models.ForeignKey(Publication, on_delete=models.CASCADE)
+    idAccountC = models.ForeignKey(Account, on_delete=models.CASCADE, db_column='idAccountC')
+    idPubliC = models.ForeignKey(Publication, on_delete=models.CASCADE, db_column='idPubliC')
     comment = models.TextField(max_length=420)
     commentDate = models.DateTimeField(default=timezone.now)
 
 class Belong(models.Model):
-    idAccountB = models.ForeignKey(Account, on_delete=models.CASCADE)
-    idGroupB = models.ForeignKey(Group, on_delete=models.CASCADE)
+    idAccountB = models.ForeignKey(Account, on_delete=models.CASCADE, db_column='idAccountB')
+    idGroupB = models.ForeignKey(Group, on_delete=models.CASCADE, db_column='idGroupB')
     joinDate = models.DateTimeField(default=timezone.now)
 
 class Join(models.Model):
-    idAccountJ = models.ForeignKey(Account, on_delete=models.CASCADE)
-    idGroupJ = models.ForeignKey(Group, on_delete=models.CASCADE)
+    idAccountJ = models.ForeignKey(Account, on_delete=models.CASCADE, db_column='idAccountJ')
+    idGroupJ = models.ForeignKey(Group, on_delete=models.CASCADE, db_column='idGroupJ')
 
 

@@ -10,9 +10,9 @@
             <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
                 <img class="card-img-top" src="https://polytech.wave-it.fr/content/img/spe/thumb/IG.png" alt="Card image cap">
                 <div class="card-body">
-                    <h5 class="card-title">Planning:{{ account.department }}</h5>
+                    <h5 class="card-title">Planning:{{ account.department }}{{account.year_in_school}}</h5>
                     <p id="size_text_card"; class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <a href="https://polytech.wave-it.fr/agenda/{{account.department}}{{account.year_in_school}}" class="btn btn-primary">Go somewhere</a>
                 </div>
             </div>
         </div>

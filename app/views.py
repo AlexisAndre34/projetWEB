@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse 
-from app.forms import SignInForm, SignUpFormAccount, GroupForm
-from app.models import Account, Category, Publication, Group, File, Comment
+from app.forms import SignInForm, SignUpFormAccount, GroupForm, UpdateAccountForm
+from app.models import Account, Category, Publication, Group, Comment, Join, Belong
+from datetime import datetime
 
 
 #---Homepage views----
@@ -51,13 +52,19 @@ def sign_up(request):
         form = SignUpFormAccount()
     return render(request, 'signin.html', locals())
 @login_required
-def create_group(request, idAcc):
+def create_group(request):
     if request.method == 'POST':
         form = GroupForm(request.POST)
         if form.is_valid():
-            account = Account.objects.get(idAccount=idAcc)
-            new_group = Group(nameGroup=form.cleaned_data.get('nameGroup'), idAccountGroup_id = idAcc)
+            #get the id of user who create the group
+            us = User.objects.get(id=request.user.id)
+            #create and save the group with the user as groupAdmin
+            new_group = Group(nameGroup=form.cleaned_data.get('nameGroup'), idAccountGroup_id=us.id)
             new_group.save()
+            #add the user in the member list
+            new_belong = Belong(idAccountB_id=us.id, idGroupB_id=new_group.idGroup, joinDate=datetime.now())
+            new_belong.save()
+            #create the default category for the group
             base_category = Category(nameCat='general',groupCat=new_group)
             base_category.save()
             return redirect('homepage')#futur redirect on group page 
@@ -69,7 +76,9 @@ def create_group(request, idAcc):
 
     #-------READ VIEWS--------
 
-
+def read_group(request,pk):
+    group = get_object_or_404(Group,idGroup=pk)
+    #publication = Publication.objects.filter()
 
     #--------UPDATE VIEWS-------
 
@@ -90,6 +99,25 @@ def update_account(request):
             account.githubLink = form.cleaned_data.get('githubLink')
             account.linkedInLink = form.cleaned_data.get('linkedInLink')
             account.save()
-            return redirect('homepage')
+            return homepage(request)
     else:
-        return render(request, 'update/updateAccount.html', locals())
+        data={'first_name': user.first_name,'last_name': user.last_name,'email': user.email,'birthDate': account.birthDate,'department': account.department,'year_in_school': account.year_in_school,'githubLink': account.githubLink,'linkedInLink': account.linkedInLink}
+        form = UpdateAccountForm(initial=data)
+        date = str(account.birthDate.year)+"-"+str(account.birthDate.month)+"-"+str(account.birthDate.day)
+    return render(request, 'update/updateAccount.html', locals())
+
+
+#---------LIST VIEWS--------
+
+#list of group that identified user belong to
+@login_required
+def group_by_user(request):
+    #get the id of user who create the group
+    us = User.objects.get(id=request.user.id)
+    belongList = Belong.objects.filter(idAccountB=us.id)
+    groupList = []
+    for group in belongList:
+        groupList.append(group.idGroupB)
+    
+    #count account per group ?
+    return render(request,'list/mygroups.html',locals())

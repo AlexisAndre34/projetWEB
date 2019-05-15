@@ -4,15 +4,15 @@
 {% if user.is_authenticated %}
 <div class="container" >
     <div class="row">
-        <div class="col-lg-2">
+        <div class="col-lg-2"><!--use to center the col 2 times-->
         </div>
         <div class="col-lg">
             <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
                 <img class="card-img-top" src="https://polytech.wave-it.fr/content/img/spe/thumb/IG.png" alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title">Planning:{{ account.department }}{{account.year_in_school}}</h5>
-                    <p id="size_text_card"; class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="https://polytech.wave-it.fr/agenda/{{account.department}}{{account.year_in_school}}" class="btn btn-primary">Go somewhere</a>
+                    <p id="size_text_card"; class="card-text">Accedez à votre emploi du temps.</p>
+                    <a href="https://polytech.wave-it.fr/agenda/{{account.department}}{{account.year_in_school}}" class="btn btn-primary">Emploi du temps</a>
                 </div>
             </div>
         </div>
@@ -20,9 +20,9 @@
             <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
                 <img class="card-img-top" src="https://polytech.wave-it.fr/content/img/spe/thumb/IG.png" alt="Card image cap">
                 <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p id="size_text_card"; class="card-text">Some quick exthef the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                    <h5 class="card-title">Mes groupes</h5>
+                    <p id="size_text_card"; class="card-text">Groupes dont vous faites parti:(afficher le nombre</p>
+                    <a href="{% url 'list_group_by_user' user.id %}" class="btn btn-primary">Mes groupes</a>
                 </div>
             </div>
         </div>

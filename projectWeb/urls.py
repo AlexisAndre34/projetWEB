@@ -25,7 +25,11 @@ urlpatterns = [
     path('login',views.login_in, name='login'),
     path('logout', views.logout_acc, name='logout'),
     path('signup/', views.sign_up, name='signup'),
-    path('gestion/', include ('app.urls'))
+    path('account/update/', views.update_account, name='update_account'),
+    path('group/create/', views.create_group, name="create_group"),
+    path('group/list/<int:id>', views.group_by_user, name="list_group_by_user"),
+    path('group/read/<int:idG>', views.read_group, name="read_group"),
+    path('publication/create/<int:idG>', views.create_publication, name="create_publication")
 ]
 
 urlpatterns+=static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelChoiceField
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from app.models import Account, Category, Publication, Group, Comment
+from app.models import Account, Admin, Publication, Group, Comment, File
 import datetime
 
 DEPARTMENT_CHOICES= (
@@ -41,12 +41,21 @@ class SignUpFormAccount(UserCreationForm):
         model = User
         fields = ('username','first_name','last_name','birthDate','email','department','year_in_school','githubLink','linkedInLink','password1','password2',)
 
-#forms to create group
+#forms to create a group
 class GroupForm(forms.ModelForm):
     nameGroup = forms.CharField(label="group name")
     class Meta:
         model = Group
         fields = ('nameGroup',)
+
+
+#forms to create a publication
+class PublicationForm(forms.ModelForm):
+        titlePubli = forms.CharField(label="titre publication")
+        contentPubli = forms.CharField(widget=forms.Textarea, label="contenu publication")
+        class Meta:
+            model = Publication
+            fields = ('titlePubli','contentPubli',)
 
 
 #----------UPDATING FORMS-------

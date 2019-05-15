@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, permission_required
-from django.http import HttpResponse 
-from app.forms import SignInForm, SignUpFormAccount, GroupForm, UpdateAccountForm
-from app.models import Account, Category, Publication, Group, Comment, Join, Belong
+from django.http import HttpResponse
+from django.forms import modelformset_factory
+from app.forms import SignInForm, SignUpFormAccount, GroupForm, UpdateAccountForm, PublicationForm
+from app.models import Account, Publication, Group, Comment, Join, Belong, File, Admin
 from datetime import datetime
+
 
 
 #---Homepage views----
@@ -61,12 +64,12 @@ def create_group(request):
             #create and save the group with the user as groupAdmin
             new_group = Group(nameGroup=form.cleaned_data.get('nameGroup'), idAccountGroup_id=us.id)
             new_group.save()
+            #make user the admin of this group
+            new_admin = Admin(adminGroup_id=new_group.idGroup, adminAccount_id=us.id)
+            new_admin.save()
             #add the user in the member list
             new_belong = Belong(idAccountB_id=us.id, idGroupB_id=new_group.idGroup, joinDate=datetime.now())
             new_belong.save()
-            #create the default category for the group
-            base_category = Category(nameCat='general',groupCat=new_group)
-            base_category.save()
             return redirect('homepage')#futur redirect on group page 
     else:
         account = Account.objects.get(idAccount=request.user.id)
@@ -74,11 +77,55 @@ def create_group(request):
     return render(request, 'create/createGroup.html',locals())
 
 
+
+        
+        
+    
+
+
+
+#create a post
+@login_required
+def create_publication(request, idG):
+    FileFormset = modelformset_factory(File, fields=('filef',), extra=3) #will show 4 form of file
+    if request.method == 'POST':
+        form = PublicationForm(request.POST)
+        formset = FileFormset(request.POST or None, request.FILES or None)
+        if form.is_valid() and formset.is_valid():
+            us = User.objects.get(id=request.user.id)
+            publication = Publication(titlePubli=form.cleaned_data.get('titlePubli'),contentPubli=form.cleaned_data.get('contentPubli'),datePublished=datetime.now(),idAccountPubli_id=us.id,idGroupPubli_id=idG)
+            publication.save()
+
+            for f in formset:
+                if f.cleaned_data.get('filef') != None :
+                    if formset.is_valid():
+                        filef = File(publiFile=publication, filef=f.cleaned_data.get('filef'))
+                        filef.save()
+                    else:
+                        redirect('create_publication', idG)
+            return redirect('read_group', idG)
+    else:
+        form = PublicationForm()
+        formset = FileFormset(queryset=File.objects.none())
+        context = {
+            'form' : form,
+            'formset' : formset,
+        }
+    return render(request, 'create/create_publication.html', context)
+
+
     #-------READ VIEWS--------
 
-def read_group(request,pk):
-    group = get_object_or_404(Group,idGroup=pk)
-    #publication = Publication.objects.filter()
+def read_group(request,idG):
+    group = get_object_or_404(Group,idGroup=idG)
+    publicationList = Publication.objects.filter(idGroupPubli=idG) #get all the publications of the group
+    for publication in publicationList:
+        fileList = File.objects.filter(publiFile=publication) #list of all the files of all the publication that are in the group idG
+
+
+
+    
+    return render(request, 'read/group.html', locals())
 
     #--------UPDATE VIEWS-------
 
@@ -111,10 +158,9 @@ def update_account(request):
 
 #list of group that identified user belong to
 @login_required
-def group_by_user(request):
-    #get the id of user who create the group
-    us = User.objects.get(id=request.user.id)
-    belongList = Belong.objects.filter(idAccountB=us.id)
+def group_by_user(request, id):
+    #us = User.objects.get(id=request.user.id) not usefull if a get the id through template
+    belongList = Belong.objects.filter(idAccountB=id)
     groupList = []
     for group in belongList:
         groupList.append(group.idGroupB)

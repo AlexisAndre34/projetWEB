@@ -39,19 +39,14 @@ class Group(models.Model):
     nameGroup = models.CharField(max_length=42, unique=True)
     idAccountGroup = models.ForeignKey(Account, on_delete=models.CASCADE, db_column='idAccountGroup')
 
-class Category(models.Model):
-    idCat = models.AutoField(primary_key=True)
-    nameCat = models.CharField(max_length=42)
-    groupCat = models.ForeignKey(Group, on_delete=models.CASCADE, null=True, db_column='groupCat')
 
 class Publication(models.Model):
     #AutoField auto increment ID
     idPubli = models.AutoField(primary_key=True)
     titlePubli = models.CharField(max_length=42)
-    ContentPubli = models.TextField(max_length=420)
+    contentPubli = models.TextField(max_length=420)
     datePublished = models.DateTimeField(default=timezone.now)
     idAccountPubli = models.ForeignKey(Account, on_delete=models.CASCADE, db_column='idAccountPubli') #User au lieu de Account ?
-    idCatPubli = models.ForeignKey(Category, on_delete=models.CASCADE, db_column='idCatPubli')
     idGroupPubli = models.ForeignKey(Group, on_delete=models.CASCADE, db_column='idGroupPubli', null=True) #django force to allow null or put a default value because it's a non-nullable field (Group)
 
 class Comment(models.Model):
@@ -69,4 +64,10 @@ class Join(models.Model):
     idAccountJ = models.ForeignKey(Account, on_delete=models.CASCADE, db_column='idAccountJ')
     idGroupJ = models.ForeignKey(Group, on_delete=models.CASCADE, db_column='idGroupJ')
 
+class File(models.Model):
+    publiFile = models.ForeignKey(Publication, on_delete=models.CASCADE, db_column='publiFile')
+    filef = models.FileField(upload_to='uploads', blank=True, null=True)
 
+class Admin(models.Model):
+    adminGroup = models.ForeignKey(Group, on_delete=models.CASCADE, db_column='adminGroup')
+    adminAccount = models.ForeignKey(Account, on_delete=models.CASCADE, db_column='adminAccount')

@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <div>
-        <h5>il y a  {{ pubList|length }} publications</h5>
+        <h5>il y a  {{ publicationList|length }} publications</h5>
     </div>
     {% for publication in publicationList %}
     
@@ -18,8 +18,25 @@
             {% endfor %}
 
             </li>
-         </ul>
+         </ul><br>
+    <form action="{% url 'read_group' idG publication.idPubli %}"method="post">
+     {% csrf_token %}
+     {{comment_form.as_p}}
+     <input type="submit" value="Submit" class="btn btn-outline-success">
+     </form>
+    <a href="#Foo" class="btn btn-default" data-toggle="collapse">{{commentList|length}} commentaires</a>
+    <button href="#Bar" class="btn btn-default" data-toggle="collapse">Derouler</button>
+    <div id="Foo" class="collapse">
+    </div>
+    <div id="Bar" class="collapse in">
+        {% for comment in commentList %}
+            posted by: {{name_acc_com.username}}<br>
+            {{comment.comment}}<br>
+        {% endfor %}
+
     </div>
     {% endfor %}
+    </div>
+    
 </div>
 {% endblock %}

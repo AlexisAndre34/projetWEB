@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
 from django.forms import modelformset_factory
-from app.forms import SignInForm, SignUpFormAccount, GroupForm, UpdateAccountForm, PublicationForm
+from app.forms import SignInForm, SignUpFormAccount, GroupForm, UpdateAccountForm, PublicationForm, CommentForm, JoinForm
 from app.models import Account, Publication, Group, Comment, Join, Belong, File, Admin
 from datetime import datetime
 
@@ -116,16 +116,37 @@ def create_publication(request, idG):
 
     #-------READ VIEWS--------
 
-def read_group(request,idG):
+def read_group(request,idG,idP):
+    us = User.objects.get(id=request.user.id)
     group = get_object_or_404(Group,idGroup=idG)
-    publicationList = Publication.objects.filter(idGroupPubli=idG) #get all the publications of the group
+    publicationList = Publication.objects.filter(idGroupPubli=idG).order_by('-datePublished')      #get all the publications of the group
+    fileList = []                                                       #contain all the files of all the publication with the id equal to idG
+    commentList = []                                                    #contain all the comments of all the publication with the id equal to publication
     for publication in publicationList:
-        fileList = File.objects.filter(publiFile=publication) #list of all the files of all the publication that are in the group idG
-
-
+        fileListPubli = File.objects.filter(publiFile=publication)      #list of the files of the publication that are in the group idG
+        for fileP in fileListPubli:
+            fileList.append(fileP)
+        commentListPubli = Comment.objects.filter(idPubliC=publication) #get all the comment of this publication
+        for com in commentListPubli:
+            name_acc_com = User.objects.get(id=com.idAccountC_id)
+            commentList.append(com)                                    #add the comment of publication for each publication
+        if idP !=0:
+            if request.method == 'POST':
+                comment_form = CommentForm(request.POST)
+                if comment_form.is_valid():
+                    new_comment = Comment(idAccountC_id=us.id, idPubliC_id=idP, comment=comment_form.cleaned_data.get('comment'), commentDate=datetime.now())
+                    new_comment.save()
+                    return redirect('read_group', idG, 0)
+        else:
+            comment_form = CommentForm()
 
     
     return render(request, 'read/group.html', locals())
+
+def read_myaccount(request):
+    us = User.objects.get(id=request.user.id)
+    account = Account.objects.get(idAccount=request.user.id)
+    return render(request, 'read/myaccount.html', locals())
 
     #--------UPDATE VIEWS-------
 
@@ -167,3 +188,24 @@ def group_by_user(request, id):
     
     #count account per group ?
     return render(request,'list/mygroups.html',locals())
+
+def list_groups(request,idG=None):
+    us = User.objects.get(id=request.user.id)
+    groupsList = Group.objects.all()
+    if idG != 0:
+        if request.method == 'POST':
+            form = JoinForm()
+            new_join = Join(idAccountJ_id = us.id, idGroupJ_id=idG)
+            new_join.save()
+            return redirect('list_groups', 0)
+        else:
+            join_form = JoinForm()
+    return render(request, 'list/listGroups.html', locals())
+
+
+    
+    
+
+
+    
+

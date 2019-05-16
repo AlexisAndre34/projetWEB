@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelChoiceField
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from app.models import Account, Admin, Publication, Group, Comment, File
+from app.models import Account, Admin, Publication, Group, Comment, File, Join
 import datetime
 
 DEPARTMENT_CHOICES= (
@@ -57,7 +57,13 @@ class PublicationForm(forms.ModelForm):
             model = Publication
             fields = ('titlePubli','contentPubli',)
 
+class CommentForm(forms.ModelForm):
 
+    comment = forms.CharField(max_length=420, widget=forms.TextInput)# add for the mutli forms
+    class Meta:
+        model = Comment
+        exclude = ['id','idAccountC','idPubliC']
+        fields=('comment',)
 #----------UPDATING FORMS-------
 
 class UpdateAccountForm(forms.Form):
@@ -69,3 +75,11 @@ class UpdateAccountForm(forms.Form):
     year_in_school = forms.ChoiceField(widget=forms.Select, choices=YEAR_IN_SCHOOL_CHOICES)
     githubLink = forms.URLField(label="github link", required=False)
     linkedInLink = forms.URLField(label="linkedIn link", required=False)
+
+
+
+
+
+class JoinForm:
+    class Meta:
+        model = Join

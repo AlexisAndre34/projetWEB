@@ -1,0 +1,24 @@
+{% extends 'base.html'%}
+
+
+{% block content %}
+
+<div class="container">
+    <div>
+        <h5>Il y a {{ groupsList|length }} groupes</h5>
+    </div>
+    {% for group in groupsList%}
+    
+    <div class="card" style="width: 18rem;">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">{{ group.idGroup }}{{ group.nameGroup }}</li>
+            <form action="{% url 'list_groups' group.idGroup %}" method="POST">
+            {% csrf_token %}
+                <input id="submit" type="submit" value="Submit" />
+            </form>
+        </ul>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

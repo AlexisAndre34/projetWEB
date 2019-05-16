@@ -22,13 +22,15 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('homepage/', views.homepage, name='homepage'),
-    path('login',views.login_in, name='login'),
-    path('logout', views.logout_acc, name='logout'),
+    path('login/',views.login_in, name='login'),
+    path('logout/', views.logout_acc, name='logout'),
     path('signup/', views.sign_up, name='signup'),
+    path('account/profil/', views.read_myaccount, name='my_account'),
     path('account/update/', views.update_account, name='update_account'),
     path('group/create/', views.create_group, name="create_group"),
-    path('group/list/<int:id>', views.group_by_user, name="list_group_by_user"),
-    path('group/read/<int:idG>', views.read_group, name="read_group"),
+    path('group/list/<int:idG>', views.list_groups, name="list_groups"),
+    path('group/list_my_groups/<int:id>', views.group_by_user, name="list_group_by_user"),
+    path('group/read/<int:idG>/<int:idP>', views.read_group, name="read_group"),
     path('publication/create/<int:idG>', views.create_publication, name="create_publication")
 ]
 

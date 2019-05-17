@@ -59,7 +59,7 @@ class PublicationForm(forms.ModelForm):
 
 class CommentForm(forms.ModelForm):
 
-    comment = forms.CharField(max_length=420, widget=forms.TextInput)# add for the mutli forms
+    comment = forms.CharField(max_length=420, widget=forms.TextInput)# added for the mutli forms
     class Meta:
         model = Comment
         exclude = ['id','idAccountC','idPubliC']
@@ -76,7 +76,8 @@ class UpdateAccountForm(forms.Form):
     githubLink = forms.URLField(label="github link", required=False)
     linkedInLink = forms.URLField(label="linkedIn link", required=False)
 
-
+class UpdateGroupForm(forms.Form):
+    nameGroup = forms.CharField(label="nouveau nom du groupe")
 
 
 

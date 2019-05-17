@@ -39,7 +39,6 @@ class Group(models.Model):
     nameGroup = models.CharField(max_length=42, unique=True)
     idAccountGroup = models.ForeignKey(Account, on_delete=models.CASCADE, db_column='idAccountGroup')
 
-
 class Publication(models.Model):
     #AutoField auto increment ID
     idPubli = models.AutoField(primary_key=True)

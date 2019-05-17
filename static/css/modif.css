@@ -40,3 +40,15 @@ text-align: center;
 #size_text_card{
   height: 72px;
 }
+
+#card_com{
+  margin: 1rem;
+}
+
+#btn_vt {
+  margin-top:1rem;
+}
+
+#list_aff {
+  margin-top:3rem;
+}

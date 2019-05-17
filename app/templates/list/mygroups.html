@@ -9,9 +9,15 @@
     </div>
     {% for group in groupList%}
     
-    <div class="card" style="width: 18rem;">
+    <div class="card" style="width: 100%;">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item">{{ group.idGroup }}{{ group.nameGroup }}</li>
+            <li class="list-group-item">{{ group.idGroup }}{{ group.nameGroup }}
+                {% if group.idAccountGroup_id == request.user.id %}
+                    <a class="btn btn-primary float-right" href="{% url 'delete_group' group.idGroup %}" role="button" onclick="return confirm('Etes-vous sur ?')">DELETE</a>
+                    <a class="btn btn-primary float-right" href="{% url 'update_group' group.idGroup %}" role="button">UPDATE</a>
+                    
+                {% endif %}
+            </li>
         </ul>
     </div>
     {% endfor %}

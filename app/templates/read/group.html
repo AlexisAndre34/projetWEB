@@ -1,42 +1,79 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <div>
-        <h5>il y a  {{ publicationList|length }} publications</h5>
-    </div>
-    {% for publication in publicationList %}
-    
-    <div class="card" style="width: 18rem;">
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">{{ publication.titlePubli }}   {{ publication.datePublished }}<br>
-            {{ publication.contentPubli }}<br>
-            {% for filep in fileList %}
-                {% if filep.publiFile_id == publication.idPubli %}
-                    <a href="{{filep.filef.url}}">{{filep.filef.name}}</a><br>
-                {% endif %}
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-sm-3 col-12">
+            <h3>Membres</h3>
+            <div class="container border rounded">
+                {% for member in memberList %}
+                <div class="row border" style="margin:1rem;">
+                    <div class="col-sm-8">
+                    {{member}}
+                    </div>
+                    <div class="col-sm-4">
+                        <p>button</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="d-flex justify-content-center">
+                <a id="btn_vt"class="btn btn-primary" href="{% url 'list_member' idG%}" role="button">voir tous</a>
+            </div>
+            
+        </div>
+        <div class="col-sm-6 col-12">
+            <div>
+                <h3>{{ publicationList|length }} publications :</h3>
+            </div>
+            {% for publication in publicationList %}
+            
+            <div class="card" style="width: 100%;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">{{ publication.titlePubli }}   {{ publication.datePublished }}<br>
+                    {{ publication.contentPubli }}<br>
+                    {% for filep in fileList %}
+                        {% if filep.publiFile_id == publication.idPubli %}
+                            <a href="{{filep.filef.url}}">{{filep.filef.name}}</a><br>
+                        {% endif %}
+                    {% endfor %}
+
+                    </li>
+                </ul><br>
+                <form action="{% url 'read_group' idG publication.idPubli %}"method="post">
+                {% csrf_token %}
+                {{comment_form.as_p}}
+                <input type="submit" value="Poster" class="btn btn-outline-success">
+                </form>  
+                <button href="#Bar" class="btn btn-default" data-toggle="collapse" data-subject="{{publication.idPubli}}" data-target="#com_list{{publication.idPubli}}">Afficher commentaires</button>
+                <div id="Foo" class="collapse">
+                </div><!--1-->
+                <div id="com_list{{publication.idPubli}}" class="collapse in">
+                    {% for comment in commentList %}
+                        {% if comment.idPubliC_id == publication.idPubli %}
+                            <div class="card" style="margin: 1rem;">
+                                <div class="card-body">
+                                    {{comment.comment}}
+                                    <footer class="blockquote-footer">posted by: {{name_acc_com.username}}<br></footer>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div><!--1-->
+            
+            </div>
             {% endfor %}
-
-            </li>
-         </ul><br>
-    <form action="{% url 'read_group' idG publication.idPubli %}"method="post">
-     {% csrf_token %}
-     {{comment_form.as_p}}
-     <input type="submit" value="Submit" class="btn btn-outline-success">
-     </form>
-    <a href="#Foo" class="btn btn-default" data-toggle="collapse">{{commentList|length}} commentaires</a>
-    <button href="#Bar" class="btn btn-default" data-toggle="collapse">Derouler</button>
-    <div id="Foo" class="collapse">
+        </div>
+        <div class="col-sm-3 col-12">
+        {% if group.idAccountGroup_id == request.user.id %}
+            <h3>Demande</h3>
+            <div class="container-fluid">
+                <button type="button" class="btn btn-primary" href="#">
+                    Nombre de demandes <span class="badge badge-light">{{joinList|length}}</span>
+                </button>
+            </div>
+        {% endif %}
+        </div>
     </div>
-    <div id="Bar" class="collapse in">
-        {% for comment in commentList %}
-            posted by: {{name_acc_com.username}}<br>
-            {{comment.comment}}<br>
-        {% endfor %}
-
-    </div>
-    {% endfor %}
-    </div>
-    
 </div>
 {% endblock %}

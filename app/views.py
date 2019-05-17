@@ -5,7 +5,8 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
 from django.forms import modelformset_factory
-from app.forms import SignInForm, SignUpFormAccount, GroupForm, UpdateAccountForm, PublicationForm, CommentForm, JoinForm
+from django.views.generic.edit import DeleteView
+from app.forms import SignInForm, SignUpFormAccount, GroupForm, UpdateAccountForm, PublicationForm, CommentForm, JoinForm, UpdateGroupForm
 from app.models import Account, Publication, Group, Comment, Join, Belong, File, Admin
 from datetime import datetime
 
@@ -113,6 +114,7 @@ def create_publication(request, idG):
         }
     return render(request, 'create/create_publication.html', context)
 
+#create a comment for a publication in a group
 
     #-------READ VIEWS--------
 
@@ -139,6 +141,18 @@ def read_group(request,idG,idP):
                     return redirect('read_group', idG, 0)
         else:
             comment_form = CommentForm()
+
+    #get the account of the group
+    memberList = []
+    belongList = Belong.objects.filter(idGroupB_id=idG)
+    for belong in belongList:
+        acc = User.objects.get(id=belong.idAccountB_id) 
+        memberList.append(acc.username)
+
+    #get use who want to join the group
+    joinList = Join.objects.filter(idGroupJ=idG)
+
+        
 
     
     return render(request, 'read/group.html', locals())
@@ -174,6 +188,20 @@ def update_account(request):
         date = str(account.birthDate.year)+"-"+str(account.birthDate.month)+"-"+str(account.birthDate.day)
     return render(request, 'update/updateAccount.html', locals())
 
+def update_group(request,idG):
+    group = Group.objects.get(idGroup=idG)
+    if request.method == 'POST':
+        form = UpdateGroupForm(request.POST)
+        if form.is_valid():
+            group.nameGroup = form.cleaned_data.get('nameGroup')
+            group.save()
+            return redirect('list_group_by_user', request.user.id)
+    else:
+        data = {'nameGroup': group.nameGroup}
+        form = UpdateGroupForm(initial=data)
+    return render(request,'update/updateGroup.html', locals())
+
+
 
 #---------LIST VIEWS--------
 
@@ -200,12 +228,30 @@ def list_groups(request,idG=None):
             return redirect('list_groups', 0)
         else:
             join_form = JoinForm()
+
+    '''listAdminG = Admin.adminGroup.get.all()
+    listAdminId = []
+    for adm in listAdminG:
+        listAdminId.append'''
+
     return render(request, 'list/listGroups.html', locals())
 
+def list_member(request, idG):
+    us = User.objects.get(id=request.user.id)
+    memberList = []
+    belongList = Belong.objects.filter(idGroupB_id=idG)
+    for belong in belongList:
+        acc = User.objects.get(id=belong.idAccountB_id) 
+        memberList.append(acc.username)
 
+    return render(request,'list/listMembers.html', locals())
     
-    
 
+#-------DELETE VIEWS-----
 
-    
+@login_required
+def delete_group(request, idG):
+    group = get_object_or_404(Group, idGroup=idG)
+    group.delete()
 
+    return redirect('list_group_by_user', request.user.id)

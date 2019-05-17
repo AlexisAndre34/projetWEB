@@ -19,6 +19,7 @@ from app import views
 from django.conf.urls.static import static
 from django.conf import settings
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('homepage/', views.homepage, name='homepage'),
@@ -28,9 +29,12 @@ urlpatterns = [
     path('account/profil/', views.read_myaccount, name='my_account'),
     path('account/update/', views.update_account, name='update_account'),
     path('group/create/', views.create_group, name="create_group"),
+    path('group/list/members/<int:idG>/',views.list_member,name="list_member"), #LIST des membres a supprimer peut etre
     path('group/list/<int:idG>', views.list_groups, name="list_groups"),
     path('group/list_my_groups/<int:id>', views.group_by_user, name="list_group_by_user"),
     path('group/read/<int:idG>/<int:idP>', views.read_group, name="read_group"),
+    path('group/update/<int:idG>', views.update_group, name="update_group"),
+    path('group/delete/<int:idG>', views.delete_group, name='delete_group'),
     path('publication/create/<int:idG>', views.create_publication, name="create_publication")
 ]
 

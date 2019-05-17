@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content%}
+
+<form action='' method='POST'>
+{% csrf_token %}
+<p>DO YOU WANT TO DELETE GROUP "{{group.nameGroup}}" </p>
+<button type="submit" class="btn btn-danger">YES</button>
+<button class="btn btn-info" href="list_groups">NO</button>
+
+{% endblock %}

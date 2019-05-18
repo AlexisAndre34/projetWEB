@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelChoiceField
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from app.models import Account, Admin, Publication, Group, Comment, File, Join
+from app.models import Account, Publication, Group, Comment, File, Join
 import datetime
 
 DEPARTMENT_CHOICES= (

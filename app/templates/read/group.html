@@ -4,27 +4,35 @@
 <div class="container-fluid mt-5">
     <div class="row">
         <div class="col-sm-3 col-12">
-            <h3>Membres</h3>
-            <div class="container border rounded">
-                {% for member in memberList %}
-                <div class="row border" style="margin:1rem;">
-                    <div class="col-sm-8">
-                    {{member}}
-                    </div>
-                    <div class="col-sm-4">
-                        <p>button</p>
+            <div class="container mb-5">
+                <div class="row">
+                <div class="col-6 aln">
+                    <h5>Membres</h5>
+                    <div class="container-fluid">
+                        <a type="button" class="btn btn-primary" href="{% url 'list_member' idG %}">
+                            membres <span class="badge badge-light">{{memberList|length}}</span>
+                        </a>
                     </div>
                 </div>
-                {% endfor %}
+                <div class="col-6 aln">
+                    {% if group.idAccountGroup_id == request.user.id %}
+                    <h5>Demande</h5>
+                    <div class="container-fluid">
+                        <a type="button" class="btn btn-primary" href="{% url 'list_join' idG %}">
+                            demandes <span class="badge badge-light">{{joinList|length}}</span>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                </div>
             </div>
-            <div class="d-flex justify-content-center">
-                <a id="btn_vt"class="btn btn-primary" href="{% url 'list_member' idG%}" role="button">voir tous</a>
-            </div>
-            
         </div>
         <div class="col-sm-6 col-12">
-            <div>
+            <div style="text-align:center;">
                 <h3>{{ publicationList|length }} publications :</h3>
+                <a href="{% url 'create_publication' idG%}">
+                    <button type="button" class="btn btn-success">nouvelle publication</button>
+                </a>
             </div>
             {% for publication in publicationList %}
             
@@ -65,14 +73,6 @@
             {% endfor %}
         </div>
         <div class="col-sm-3 col-12">
-        {% if group.idAccountGroup_id == request.user.id %}
-            <h3>Demande</h3>
-            <div class="container-fluid">
-                <button type="button" class="btn btn-primary" href="#">
-                    Nombre de demandes <span class="badge badge-light">{{joinList|length}}</span>
-                </button>
-            </div>
-        {% endif %}
         </div>
     </div>
 </div>

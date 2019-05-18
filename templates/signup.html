@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
     <div id="container" class="container">
         <div class="row">
@@ -7,12 +9,7 @@
                 <form method="post">
                 {{ formset.non_form_errors }}
                 {% csrf_token %}
-                {% for field in form %}
-                    <div>
-                    {{field.label_tag}}<br>
-                    {{field}}<br>
-                    </div>
-                {% endfor %}
+                {{form|crispy}}
                 <div id="button_connexion">
                 <button type="submit" class="btn btn-primary">Créer compte</button>
                 </div>

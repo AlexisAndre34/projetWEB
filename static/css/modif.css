@@ -29,12 +29,29 @@ text-align: center;
 
 }
 
+.body-cl {
+  background-color: #3780;
+}
+
 #button_connexion {
   margin: 2rem;
 }
 
 .col-sm-6 .offset-sm-3 .text-center {
   margin: 1rem;
+}
+
+.card {
+  margin-top: 3rem;
+}
+
+.img-resize {
+  height: 180px;
+
+}
+
+.aln{
+  text-align: center;
 }
 
 #size_text_card{

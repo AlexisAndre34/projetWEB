@@ -3,22 +3,56 @@
 
 {% block content %}
 
-<div class="container">
-    <div>
-        <h5>Il y a {{ groupsList|length }} groupes</h5>
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-sm-3 col-12">
+        </div>
+        <div class="col-sm-6 col-12">
+            <div>
+                <h3>Il y a {{ groupsList|length }} groupes</h3>
+            </div>
+            {% for group in groups%}
+            
+            <div class="card" style="width: 100%;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><h4>nom : {{ group.nameGroup }}</h4>
+                        <a href="{% url 'join_group' group.idGroup %}">
+                            <button type="button" class="btn btn-success float-right">requete d'ajout</button>
+                        </a>
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-warning"> {{ message}}</div>
+                        {% endfor %}
+                        {% endif %}
+                    </li>
+                    <!--<form action="{% url 'list_groups' group.idGroup %}" method="POST">
+                    {% csrf_token %}
+                        <input id="submit" type="submit" value="Submit" />
+                    </form>-->
+                </ul>
+            </div>
+            {% endfor %}
+            <div class="pagination">
+                <span class="step-links">
+                    {% if groups.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ groups.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ groups.number }} of {{ groups.paginator.num_pages }}.
+                    </span>
+
+                    {% if groups.has_next %}
+                        <a href="?page={{ groups.next_page_number }}">next</a>
+                        <a href="?page={{ groups.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-3 col-12">
+        </div>
     </div>
-    {% for group in groupsList%}
-    
-    <div class="card" style="width: 18rem;">
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">{{ group.idGroup }}{{ group.nameGroup }}</li>
-            <form action="{% url 'list_groups' group.idGroup %}" method="POST">
-            {% csrf_token %}
-                <input id="submit" type="submit" value="Submit" />
-            </form>
-        </ul>
-    </div>
-    {% endfor %}
 </div>
 
 {% endblock %}

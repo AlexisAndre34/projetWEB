@@ -66,7 +66,3 @@ class Join(models.Model):
 class File(models.Model):
     publiFile = models.ForeignKey(Publication, on_delete=models.CASCADE, db_column='publiFile')
     filef = models.FileField(upload_to='uploads', blank=True, null=True)
-
-class Admin(models.Model):
-    adminGroup = models.ForeignKey(Group, on_delete=models.CASCADE, db_column='adminGroup')
-    adminAccount = models.ForeignKey(Account, on_delete=models.CASCADE, db_column='adminAccount')

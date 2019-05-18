@@ -2,62 +2,69 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<div class="container" >
-    <div class="row">
-        <div class="col-lg-2"><!--use to center the col 2 times-->
-        </div>
-        <div class="col-lg">
-            <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
-                <img class="card-img-top" src="https://polytech.wave-it.fr/content/img/spe/thumb/IG.png" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Planning:{{ account.department }}{{account.year_in_school}}</h5>
-                    <p id="size_text_card"; class="card-text">Accedez à votre emploi du temps.</p>
-                    <a href="https://polytech.wave-it.fr/agenda/{{account.department}}{{account.year_in_school}}" class="btn btn-primary">Emploi du temps</a>
+    <div class="container" >
+        <div class="row">
+            <div class="col-lg-2"><!--use to center the col 2 times-->
+            </div>
+            <div class="col-lg">
+                <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
+                    <img class="card-img-top" src="https://polytech.wave-it.fr/content/img/spe/thumb/{{account.department}}.png" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Planning: {{ account.department }}{{account.year_in_school}}</h5>
+                        <p id="size_text_card"; class="card-text">Accedez à votre emploi du temps.</p>
+                        <a href="https://polytech.wave-it.fr/agenda/{{account.department}}{{account.year_in_school}}" class="btn btn-primary">Emploi du temps</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg">
-            <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
-                <img class="card-img-top" src="https://polytech.wave-it.fr/content/img/spe/thumb/IG.png" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Mes groupes</h5>
-                    <p id="size_text_card"; class="card-text">Groupes dont vous faites parti:(afficher le nombre</p>
-                    <a href="{% url 'list_group_by_user' user.id %}" class="btn btn-primary">Mes groupes</a>
+            <div class="col-lg">
+                <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
+                    <img class="card-img-top img-resize" src="https://www.studiodanslesnuages.fr/wp-content/uploads/2018/05/Icone-Workshop-studiodanslesnuages6.png" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Mes groupes</h5>
+                        <p id="size_text_card"; class="card-text">Groupes dont vous faites parti</p>
+                        <a href="{% url 'list_group_by_user' user.id %}" class="btn btn-primary">Mes groupes</a>
+                    </div>
                 </div>
             </div>
+            <div class="col-lg-2">
+            </div>
         </div>
-        <div class="col-lg-2">
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-lg-2">
-        </div>
-        <div class="col-lg">
-            <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
-                <img class="card-img-top" src="https://polytech.wave-it.fr/content/img/spe/thumb/IG.png" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Groupes</h5>
-                    <p id="size_text_card"; class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="{% url 'list_groups' 0 %}" class="btn btn-primary">afficher</a>
+        <div class="row">
+            <div class="col-lg-2">
+            </div>
+            <div class="col-lg">
+                <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
+                    <img class="card-img-top img-resize" src="http://depressionuk.org/wp-content/uploads/2018/01/groups_17014112.jpg" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Groupes</h5>
+                        <p id="size_text_card"; class="card-text">Consulter tous les groupes.</p>
+                        <a href="{% url 'list_groups' 0 %}" class="btn btn-primary">afficher</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg">
-            <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
-                <img class="card-img-top" src="https://polytech.wave-it.fr/content/img/spe/thumb/IG.png" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p id="size_text_card"; class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+            <div class="col-lg">
+                <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
+                    <img class="card-img-top img-resize" src="https://www.drupal.org/files/project-images/drupal-addtoany-logo.png" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">Creer un groupe</h5>
+                        <p id="size_text_card"; class="card-text">Creer un groupes</p>
+                        <a href="{% url 'create_group' %}" class="btn btn-primary">Creation</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-2">
+            <div class="col-lg-2">
+            </div>
         </div>
     </div>
-</div>
-{% else %}
-<h1>ça marche</h1>
-{% endif %}
+    {% else %}
+        <div class="container-fluid">
+            <div class="row">
+                    coucou
+            </div>
+        </div>
+        
+    {% endif %}
 {% endblock %} 
+
+

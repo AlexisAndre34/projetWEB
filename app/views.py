@@ -3,11 +3,12 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.forms import modelformset_factory
 from django.views.generic.edit import DeleteView
 from app.forms import SignInForm, SignUpFormAccount, GroupForm, UpdateAccountForm, PublicationForm, CommentForm, JoinForm, UpdateGroupForm
-from app.models import Account, Publication, Group, Comment, Join, Belong, File, Admin
+from app.models import Account, Publication, Group, Comment, Join, Belong, File
 from datetime import datetime
 
 
@@ -15,7 +16,8 @@ from datetime import datetime
 #---Homepage views----
 
 def homepage(request):
-    account = Account.objects.get(idAccount=request.user.id)
+    if request.user.is_authenticated:
+        account = Account.objects.get(idAccount=request.user.id)
     return render(request, 'homepage.html', locals())
 #------login and logout views----------
 
@@ -35,7 +37,7 @@ def login_in(request):
 
 def logout_acc(request):
     logout(request)
-    return render(request, 'homepage.html')
+    return redirect('homepage')
 
 #-------creation views---------
 
@@ -65,13 +67,10 @@ def create_group(request):
             #create and save the group with the user as groupAdmin
             new_group = Group(nameGroup=form.cleaned_data.get('nameGroup'), idAccountGroup_id=us.id)
             new_group.save()
-            #make user the admin of this group
-            new_admin = Admin(adminGroup_id=new_group.idGroup, adminAccount_id=us.id)
-            new_admin.save()
             #add the user in the member list
             new_belong = Belong(idAccountB_id=us.id, idGroupB_id=new_group.idGroup, joinDate=datetime.now())
             new_belong.save()
-            return redirect('homepage')#futur redirect on group page 
+            return redirect('read_group', new_group.idGroup, 0)#futur redirect on group page 
     else:
         account = Account.objects.get(idAccount=request.user.id)
         form=GroupForm()
@@ -104,7 +103,7 @@ def create_publication(request, idG):
                         filef.save()
                     else:
                         redirect('create_publication', idG)
-            return redirect('read_group', idG)
+            return redirect('read_group', idG, 0)
     else:
         form = PublicationForm()
         formset = FileFormset(queryset=File.objects.none())
@@ -217,9 +216,18 @@ def group_by_user(request, id):
     #count account per group ?
     return render(request,'list/mygroups.html',locals())
 
+
+@login_required
 def list_groups(request,idG=None):
     us = User.objects.get(id=request.user.id)
     groupsList = Group.objects.all()
+    paginator = Paginator(groupsList,10)
+
+    page = request.GET.get('page')
+    groups = paginator.get_page(page)
+
+
+    '''#cette parti doit etre remplace par la fonction join_group
     if idG != 0:
         if request.method == 'POST':
             form = JoinForm()
@@ -227,17 +235,25 @@ def list_groups(request,idG=None):
             new_join.save()
             return redirect('list_groups', 0)
         else:
-            join_form = JoinForm()
-
-    '''listAdminG = Admin.adminGroup.get.all()
-    listAdminId = []
-    for adm in listAdminG:
-        listAdminId.append'''
-
+            join_form = JoinForm()'''
+    
     return render(request, 'list/listGroups.html', locals())
 
+#fonction pour remplace le forme
+def join_group(request, idG):
+    account = Account.objects.get(idAccount = request.user.id)
+    group = Group.objects.get(idGroup=idG)
+    #have to check if the user who want to join the group already do it
+    if Join.objects.filter(idAccountJ=account, idGroupJ=group).count() > 0:
+        messages.error(request,'vous avez deja fait une demande pour ce groupe.')
+    else:
+        new_join = Join(idAccountJ_id = request.user.id, idGroupJ_id=idG)
+        new_join.save()
+    return redirect('list_groups', 0)
+
+@login_required
 def list_member(request, idG):
-    us = User.objects.get(id=request.user.id)
+    #us = User.objects.get(id=request.user.id)
     memberList = []
     belongList = Belong.objects.filter(idGroupB_id=idG)
     for belong in belongList:
@@ -245,7 +261,24 @@ def list_member(request, idG):
         memberList.append(acc.username)
 
     return render(request,'list/listMembers.html', locals())
+
+
+@login_required
+def list_join(request,idG):
+    usList = []
+    joinList = Join.objects.filter(idGroupJ_id=idG)
+    #get the user who manage the group to allow him to see accept and decline button
+    group = Group.objects.get(idGroup=idG)
+    managerGroup = group.idAccountGroup_id
+    for join in joinList:
+        us = User.objects.get(id=join.idAccountJ_id)
+        usList.append(us)
     
+    return render(request, 'list/listJoins.html', locals())
+
+    
+
+
 
 #-------DELETE VIEWS-----
 
@@ -255,3 +288,23 @@ def delete_group(request, idG):
     group.delete()
 
     return redirect('list_group_by_user', request.user.id)
+
+
+
+@login_required
+def status_join(request,idG,idA,operation):
+    #idAccountJ must be an account object. I have to get it
+    acc = Account.objects.get(idAccount=idA)
+    #idGrouB must be a group object
+    group = Group.objects.get(idGroup=idG) 
+    if operation == 'decline':
+        join = get_object_or_404(Join, idGroupJ=idG, idAccountJ=idA)
+        join.delete()
+        
+    elif operation == 'accept':
+        new_belong = Belong(idAccountB=acc, idGroupB=group, joinDate=datetime.now())
+        new_belong.save()
+        #delete the join
+        join = get_object_or_404(Join, idGroupJ=idG, idAccountJ=acc)
+        join.delete()
+    return redirect('list_join', idG)

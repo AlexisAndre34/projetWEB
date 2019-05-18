@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="container-fluid mt-5">
     <div class="row">
@@ -35,25 +35,29 @@
                 </a>
             </div>
             {% for publication in publicationList %}
-            
-            <div class="card" style="width: 100%;">
+            <div class="card one-edge-shadow border-publi" style="width: 100%;">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">{{ publication.titlePubli }}   {{ publication.datePublished }}<br>
-                    {{ publication.contentPubli }}<br>
+                    <li class="list-group-item"><h5 class="font-weight-bold">{{ publication.titlePubli }}</h5>  {{ publication.datePublished }}</li>
+                    <div class="reduce">
+                        {{ publication.contentPubli }}<br>
+
                     {% for filep in fileList %}
                         {% if filep.publiFile_id == publication.idPubli %}
                             <a href="{{filep.filef.url}}">{{filep.filef.name}}</a><br>
                         {% endif %}
                     {% endfor %}
+                    </div>
 
                     </li>
                 </ul><br>
-                <form action="{% url 'read_group' idG publication.idPubli %}"method="post">
-                {% csrf_token %}
-                {{comment_form.as_p}}
-                <input type="submit" value="Poster" class="btn btn-outline-success">
-                </form>  
-                <button href="#Bar" class="btn btn-default" data-toggle="collapse" data-subject="{{publication.idPubli}}" data-target="#com_list{{publication.idPubli}}">Afficher commentaires</button>
+                <div class="reduce">
+                    <form action="{% url 'read_group' idG publication.idPubli %}"method="post">
+                    {% csrf_token %}
+                    {{comment_form|crispy}}
+                    <input type="submit" value="Poster" class="btn btn-outline-success reduce">
+                    </form>  
+                    <button href="#Bar" class="btn btn-default" data-toggle="collapse" data-subject="{{publication.idPubli}}" data-target="#com_list{{publication.idPubli}}">Afficher commentaires</button>
+                </div>
                 <div id="Foo" class="collapse">
                 </div><!--1-->
                 <div id="com_list{{publication.idPubli}}" class="collapse in">

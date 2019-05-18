@@ -18,9 +18,8 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><a href="{% url 'read_group' group.idGroup 0 %}">{{ group.nameGroup }}</a>
                         {% if group.idAccountGroup_id == request.user.id %}
-                            <a class="btn btn-primary float-right" href="{% url 'delete_group' group.idGroup %}" role="button" onclick="return confirm('Etes-vous sur ?')">DELETE</a>
-                            <a class="btn btn-primary float-right" href="{% url 'update_group' group.idGroup %}" role="button">UPDATE</a>
-                            
+                            <a class="btn btn-danger float-right" href="{% url 'delete_group' group.idGroup %}" role="button" onclick="return confirm('Etes-vous sur ?')">supprimer</a>
+                            <a class="btn btn-warning float-right mr-1" href="{% url 'update_group' group.idGroup %}" role="button">modifier</a>
                         {% endif %}
                     </li>
                 </ul>

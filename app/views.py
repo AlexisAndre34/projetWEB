@@ -124,6 +124,7 @@ def read_group(request,idG,idP):
     fileList = []                                                       #contain all the files of all the publication with the id equal to idG
     commentList = []                                                    #contain all the comments of all the publication with the id equal to publication
     for publication in publicationList:
+        name_acc_publi = User.objects.get(id=publication.idAccountPubli_id)
         fileListPubli = File.objects.filter(publiFile=publication)      #list of the files of the publication that are in the group idG
         for fileP in fileListPubli:
             fileList.append(fileP)

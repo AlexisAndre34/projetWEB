@@ -79,7 +79,10 @@ class UpdateAccountForm(forms.Form):
 class UpdateGroupForm(forms.Form):
     nameGroup = forms.CharField(label="nouveau nom du groupe")
 
-
+class UpdatePublicationForm(forms.Form):
+    titlePubli = forms.CharField(label="titre publication")
+    contentPubli = forms.CharField(widget=forms.Textarea, label="contenu publication")
+    
 
 class JoinForm:
     class Meta:

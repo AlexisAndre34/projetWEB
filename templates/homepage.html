@@ -7,22 +7,22 @@
             <div class="col-lg-2"><!--use to center the col 2 times-->
             </div>
             <div class="col-lg">
-                <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
-                    <img class="card-img-top" src="https://polytech.wave-it.fr/content/img/spe/thumb/{{account.department}}.png" alt="Card image cap">
+                <div class="card border-publi one-edge-shadow" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
+                    <img class="card-img-top border-bottom" src="https://polytech.wave-it.fr/content/img/spe/thumb/{{account.department}}.png" alt="Card image cap">
                     <div class="card-body">
-                        <h5 class="card-title">Planning: {{ account.department }}{{account.year_in_school}}</h5>
+                        <h5 class="card-title border-bottom">Planning: {{ account.department }}{{account.year_in_school}}</h5>
                         <p id="size_text_card"; class="card-text">Accedez à votre emploi du temps.</p>
-                        <a href="https://polytech.wave-it.fr/agenda/{{account.department}}{{account.year_in_school}}" class="btn btn-primary">Emploi du temps</a>
+                        <a href="https://polytech.wave-it.fr/agenda/{{account.department}}{{account.year_in_school}}" class="btn btn-primary">consulter</a>
                     </div>
                 </div>
             </div>
             <div class="col-lg">
-                <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
-                    <img class="card-img-top img-resize" src="https://www.studiodanslesnuages.fr/wp-content/uploads/2018/05/Icone-Workshop-studiodanslesnuages6.png" alt="Card image cap">
+                <div class="card border-publi one-edge-shadow" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
+                    <img class="card-img-top img-resize border-bottom" src="https://www.studiodanslesnuages.fr/wp-content/uploads/2018/05/Icone-Workshop-studiodanslesnuages6.png" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">Mes groupes</h5>
                         <p id="size_text_card"; class="card-text">Groupes dont vous faites parti</p>
-                        <a href="{% url 'list_group_by_user' user.id %}" class="btn btn-primary">Mes groupes</a>
+                        <a href="{% url 'list_group_by_user' user.id %}" class="btn btn-primary">afficher</a>
                     </div>
                 </div>
             </div>
@@ -34,8 +34,8 @@
             <div class="col-lg-2">
             </div>
             <div class="col-lg">
-                <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
-                    <img class="card-img-top img-resize" src="http://depressionuk.org/wp-content/uploads/2018/01/groups_17014112.jpg" alt="Card image cap">
+                <div class="card border-publi one-edge-shadow" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
+                    <img class="card-img-top img-resize border-bottom" src="http://depressionuk.org/wp-content/uploads/2018/01/groups_17014112.jpg" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">Groupes</h5>
                         <p id="size_text_card"; class="card-text">Consulter tous les groupes.</p>
@@ -44,11 +44,11 @@
                 </div>
             </div>
             <div class="col-lg">
-                <div class="card" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
-                    <img class="card-img-top img-resize" src="https://www.drupal.org/files/project-images/drupal-addtoany-logo.png" alt="Card image cap">
+                <div class="card border-publi one-edge-shadow" style="width: 18rem; margin-top: 2rem; height: 373.6px;">
+                    <img class="card-img-top img-resize border-bottom" src="https://www.drupal.org/files/project-images/drupal-addtoany-logo.png" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">Creer un groupe</h5>
-                        <p id="size_text_card"; class="card-text">Creer un groupes</p>
+                        <p id="size_text_card"; class="card-text"></p>
                         <a href="{% url 'create_group' %}" class="btn btn-primary">Creation</a>
                     </div>
                 </div>

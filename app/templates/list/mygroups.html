@@ -10,11 +10,11 @@
         </div>
         <div class="col-sm-6 col-12">
             <div>
-            <h3>vous êtes dans {{ groupList|length }} groupes</h3>
+            <h3 class="border-bottom color-title">{{ groupsList|length }} Groupes</h3>
             </div>
             {% for group in groupList%}
             
-            <div class="card" style="width: 100%;">
+            <div class="card one-edge-shadow border-publi" style="width: 100%;">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><a href="{% url 'read_group' group.idGroup 0 %}">{{ group.nameGroup }}</a>
                         {% if group.idAccountGroup_id == request.user.id %}

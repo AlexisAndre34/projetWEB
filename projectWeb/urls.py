@@ -38,7 +38,9 @@ urlpatterns = [
     path('group/delete/<int:idG>', views.delete_group, name='delete_group'),
     path('group/demande/<int:idG>', views.list_join,name="list_join"),
     path('group/demande/operation/<int:idG>/<int:idA>/<str:operation>', views.status_join, name="status_join"),
-    path('publication/create/<int:idG>', views.create_publication, name="create_publication")
+    path('publication/create/<int:idG>', views.create_publication, name="create_publication"),
+    path('publication/update/<int:idG>/<int:idP>', views.update_publication, name="update_publication"),
+    path('publication/delete/<int:idG>/<int:idP>', views.delete_publication, name="delete_publication")
 ]
 
 urlpatterns+=static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

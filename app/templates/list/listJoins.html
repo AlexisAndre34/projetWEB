@@ -10,19 +10,19 @@
         </div>
         <div class="col-sm-6 col-12">
             <div>
-            <h3>Il y a {{ joinList|length }} demandes</h3>
+            <h3 class="border-bottom color-title">{{ JoinList|length }} Demandes</h3>
             </div>
             {% for us in usList%}
             
-            <div class="card" style="width: 100%;">
+            <div class="card one-edge-shadow border-publi" style="width: 100%;">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><a href="#">{{ us.username }}</a>
                         {% if managerGroup == request.user.id %}
                             <a href="{% url 'status_join' group.idGroup us.id 'accept' %}">
-                            <button type="button" class="btn btn-success">accepter</button>
+                            <button type="button" class="btn btn-success float-rigth">accepter</button>
                             </a>
                             <a href="{% url 'status_join' group.idGroup us.id 'decline' %}">
-                            <button type="button" class="btn btn-danger">refuser</button>
+                            <button type="button" class="btn btn-danger float-rigth">refuser</button>
                             </a>
                         {% endif %}
                     </li>

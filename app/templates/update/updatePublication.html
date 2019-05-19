@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
 
 <div class="container-fluid mt-5">
@@ -9,8 +11,7 @@
         <div class="col-sm-6 col-12">
             <form method="post">
             {% csrf_token %}
-            {{form.label_tag}}
-            {{form}}
+            {{form|crispy}}
             <button type="submit" class="btn btn-primary">editer</button>
             </form>
         </div>

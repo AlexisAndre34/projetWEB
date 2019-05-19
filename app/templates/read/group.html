@@ -7,7 +7,7 @@
             <div class="container mb-5">
                 <div class="row">
                 <div class="col-6 aln">
-                    <h5>Membres</h5>
+                    <h5>{{group.nameGroup}}</h5>
                     <div class="container-fluid">
                         <a type="button" class="btn btn-primary" href="{% url 'list_member' idG %}">
                             membres <span class="badge badge-light">{{memberList|length}}</span>
@@ -29,15 +29,29 @@
         </div>
         <div class="col-sm-6 col-12">
             <div style="text-align:center;">
-                <h3>{{ publicationList|length }} publications :</h3>
+                <h3 class="border-bottom color-title">{{ publicationList|length }} Publications</h3>
                 <a href="{% url 'create_publication' idG%}">
                     <button type="button" class="btn btn-success">nouvelle publication</button>
                 </a>
             </div>
-            {% for publication in publicationList %}
+            {% for publication in publications %}
             <div class="card one-edge-shadow border-publi" style="width: 100%;">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><h5 class="font-weight-bold">{{ publication.titlePubli }}</h5>  {{ publication.datePublished }}</li>
+                    <li class="list-group-item"><h5 class="font-weight-bold">{{ publication.titlePubli }}
+                        
+                        <span class="float-right">
+                            {% if request.user.id == publication.idAccountPubli_id or request.user.id == idG.idAccountGroup_id %}
+                            <a href={% url 'delete_publication' idG publication.idPubli %}>
+                                <button type="button" class="btn btn-danger">supprimer</button>
+                            </a>
+                            {% endif %}
+                            
+                            {% if request.user.id == publication.idAccountPubli_id %}
+                            <a href={% url 'update_publication' idG publication.idPubli %}>
+                                <button type="button" class="btn btn-warning">editer</button>
+                            </a>
+                            {% endif %}
+                        </span></h5>  {{ publication.datePublished }}</li>
                     <div class="reduce">
                         {{ publication.contentPubli }}<br>
 
@@ -46,6 +60,11 @@
                             <a href="{{filep.filef.url}}">{{filep.filef.name}}</a><br>
                         {% endif %}
                     {% endfor %}
+                    <!--<li class="list-group-item">
+                        <a href={% url 'delete_publication' idG publication.idPubli %}>
+                        <button type="button" class="btn btn-danger">supprimer</button>
+                        </a>
+                    </li>-->
                     </div>
 
                     </li>
@@ -75,6 +94,19 @@
             
             </div>
             {% endfor %}
+            <nav aria-label="Page navigation example ">
+            <ul class="pagination d-flex justify-content-center mt-2">
+                    {% if publications.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page=1">&laquo;</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ publications.previous_page_number }}">precedent</a></li>
+                    {% endif %}
+
+                    {% if publications.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ publications.next_page_number }}">suivant</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ publications.paginator.num_pages }}">&raquo;</a></li>
+                    {% endif %}
+            </ul>
+            </nav>
         </div>
         <div class="col-sm-3 col-12">
         </div>

@@ -7,7 +7,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.forms import modelformset_factory
 from django.views.generic.edit import DeleteView
-from app.forms import SignInForm, SignUpFormAccount, GroupForm, UpdateAccountForm, PublicationForm, CommentForm, JoinForm, UpdateGroupForm
+from app.forms import SignInForm, SignUpFormAccount, GroupForm, UpdateAccountForm, PublicationForm, CommentForm, JoinForm, UpdateGroupForm, UpdatePublicationForm
 from app.models import Account, Publication, Group, Comment, Join, Belong, File
 from datetime import datetime
 
@@ -118,7 +118,6 @@ def create_publication(request, idG):
     #-------READ VIEWS--------
 
 def read_group(request,idG,idP):
-    us = User.objects.get(id=request.user.id)
     group = get_object_or_404(Group,idGroup=idG)
     publicationList = Publication.objects.filter(idGroupPubli=idG).order_by('-datePublished')      #get all the publications of the group
     fileList = []                                                       #contain all the files of all the publication with the id equal to idG
@@ -132,15 +131,21 @@ def read_group(request,idG,idP):
         for com in commentListPubli:
             name_acc_com = User.objects.get(id=com.idAccountC_id)
             commentList.append(com)                                    #add the comment of publication for each publication
-        if idP !=0:
+        if idP != 0:
             if request.method == 'POST':
                 comment_form = CommentForm(request.POST)
                 if comment_form.is_valid():
-                    new_comment = Comment(idAccountC_id=us.id, idPubliC_id=idP, comment=comment_form.cleaned_data.get('comment'), commentDate=datetime.now())
+                    new_comment = Comment(idAccountC_id=request.user.id, idPubliC_id=idP, comment=comment_form.cleaned_data.get('comment'), commentDate=datetime.now())
                     new_comment.save()
                     return redirect('read_group', idG, 0)
         else:
             comment_form = CommentForm()
+
+
+    paginator = Paginator(publicationList,5)
+
+    page = request.GET.get('page')
+    publications = paginator.get_page(page)
 
     #get the account of the group
     memberList = []
@@ -152,7 +157,6 @@ def read_group(request,idG,idP):
     #get use who want to join the group
     joinList = Join.objects.filter(idGroupJ=idG)
 
-        
 
     
     return render(request, 'read/group.html', locals())
@@ -201,6 +205,21 @@ def update_group(request,idG):
         form = UpdateGroupForm(initial=data)
     return render(request,'update/updateGroup.html', locals())
 
+def update_publication(request,idG,idP):
+    publication = get_object_or_404(Publication, idGroupPubli=idG, idPubli=idP)
+    if request.method == 'POST':
+        form = UpdatePublicationForm(request.POST)
+        if form.is_valid():
+            publication.titlePubli = form.cleaned_data.get('titlePubli')
+            publication.contentPubli = form.cleaned_data.get('contentPubli')
+            publication.datePublished = datetime.now()
+            publication.save()
+            return redirect('read_group', idG, 0)
+    else:
+        data = {'titlePubli': publication.titlePubli, 'contentPubli': publication.contentPubli }
+        form = UpdatePublicationForm(initial=data)
+    return render(request,'update/updatePublication.html',locals())
+
 
 
 #---------LIST VIEWS--------
@@ -226,17 +245,6 @@ def list_groups(request,idG=None):
 
     page = request.GET.get('page')
     groups = paginator.get_page(page)
-
-
-    '''#cette parti doit etre remplace par la fonction join_group
-    if idG != 0:
-        if request.method == 'POST':
-            form = JoinForm()
-            new_join = Join(idAccountJ_id = us.id, idGroupJ_id=idG)
-            new_join.save()
-            return redirect('list_groups', 0)
-        else:
-            join_form = JoinForm()'''
     
     return render(request, 'list/listGroups.html', locals())
 
@@ -255,6 +263,8 @@ def join_group(request, idG):
 @login_required
 def list_member(request, idG):
     #us = User.objects.get(id=request.user.id)
+    group = Group.objects.get(idGroup=idG)
+    managerGroup = group.idAccountGroup_id
     memberList = []
     belongList = Belong.objects.filter(idGroupB_id=idG)
     for belong in belongList:
@@ -286,10 +296,26 @@ def list_join(request,idG):
 @login_required
 def delete_group(request, idG):
     group = get_object_or_404(Group, idGroup=idG)
-    group.delete()
+    managerGroup = group.idAccountGroup_id
+    if request.user.id == managerGroup:
+        group = get_object_or_404(Group, idGroup=idG)
+        group.delete()
+    else:
+        return redirect('homepage')
 
     return redirect('list_group_by_user', request.user.id)
 
+def delete_member(request,idG,idM):
+    #check if the actuel user is the manager
+    group = get_object_or_404(Group, idGroup=idG)
+    managerGroup = group.idAccountGroup_id
+    if request.user.id == managerGroup:
+        member = get_object_or_404(Belong,idAccount=idM)
+        group.delete()
+    else:
+        return redirect('homepage')
+
+    return redirect('list_member',idG)
 
 
 @login_required
@@ -309,3 +335,19 @@ def status_join(request,idG,idA,operation):
         join = get_object_or_404(Join, idGroupJ=idG, idAccountJ=acc)
         join.delete()
     return redirect('list_join', idG)
+
+def delete_publication(request,idG,idP):
+    #get the user who created the publication
+    usPubli = get_object_or_404(Publication, idPubli=idP)
+    #get the admin of the group
+    group = get_object_or_404(Group, idGroup=idG)
+
+
+    if request.user.id == usPubli.idAccountPubli_id or request.user.id == group.idAccountGroup_id:
+        publi = Publication.objects.get(idPubli=idP)
+        publi.delete()
+    else:
+        return redirect('homepage')
+
+    return redirect('read_group',idG, 0)
+

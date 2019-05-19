@@ -9,11 +9,11 @@
         </div>
         <div class="col-sm-6 col-12">
             <div>
-                <h3>Il y a {{ groupsList|length }} groupes</h3>
+                <h3 class="border-bottom color-title">{{ groupsList|length }} Groupes</h3>
             </div>
             {% for group in groups%}
             
-            <div class="card" style="width: 100%;">
+            <div class="card one-edge-shadow border-publi" style="width: 100%;">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><h4>nom : {{ group.nameGroup }}</h4>
                         <a href="{% url 'join_group' group.idGroup %}">
@@ -32,23 +32,19 @@
                 </ul>
             </div>
             {% endfor %}
-            <div class="pagination">
-                <span class="step-links">
+            <nav aria-label="Page navigation example ">
+            <ul class="pagination d-flex justify-content-center mt-2">
                     {% if groups.has_previous %}
-                        <a href="?page=1">&laquo; first</a>
-                        <a href="?page={{ groups.previous_page_number }}">previous</a>
+                        <li class="page-item"><a class="page-link" href="?page=1">&laquo;</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ groups.previous_page_number }}">precedent</a></li>
                     {% endif %}
-
-                    <span class="current">
-                        Page {{ groups.number }} of {{ groups.paginator.num_pages }}.
-                    </span>
 
                     {% if groups.has_next %}
-                        <a href="?page={{ groups.next_page_number }}">next</a>
-                        <a href="?page={{ groups.paginator.num_pages }}">last &raquo;</a>
+                        <li class="page-item"><a class="page-link" href="?page={{ groups.next_page_number }}">suivant</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ groups.paginator.num_pages }}">&raquo;</a></li>
                     {% endif %}
-                </span>
-            </div>
+            </ul>
+            </nav>
         </div>
         <div class="col-sm-3 col-12">
         </div>

@@ -82,7 +82,7 @@ class UpdateGroupForm(forms.Form):
 class UpdatePublicationForm(forms.Form):
     titlePubli = forms.CharField(label="titre publication")
     contentPubli = forms.CharField(widget=forms.Textarea, label="contenu publication")
-    
+
 
 class JoinForm:
     class Meta:

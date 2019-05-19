@@ -94,3 +94,10 @@ text-align: center;
 #list_aff {
   margin-top:3rem;
 }
+
+#nav-title {
+  font-family: 'Raleway',sans-serif;
+  background: -webkit-linear-gradient(#43cfd9, #95f26d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

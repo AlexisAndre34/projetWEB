@@ -185,7 +185,7 @@ def update_account(request):
             account.githubLink = form.cleaned_data.get('githubLink')
             account.linkedInLink = form.cleaned_data.get('linkedInLink')
             account.save()
-            return homepage(request)
+            return redirect('my_account')
     else:
         data={'first_name': user.first_name,'last_name': user.last_name,'email': user.email,'birthDate': account.birthDate,'department': account.department,'year_in_school': account.year_in_school,'githubLink': account.githubLink,'linkedInLink': account.linkedInLink}
         form = UpdateAccountForm(initial=data)

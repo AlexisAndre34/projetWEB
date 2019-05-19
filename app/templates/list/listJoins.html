@@ -19,10 +19,10 @@
                     <li class="list-group-item"><a href="#">{{ us.username }}</a>
                         {% if managerGroup == request.user.id %}
                             <a href="{% url 'status_join' group.idGroup us.id 'accept' %}">
-                            <button type="button" class="btn btn-success float-rigth">accepter</button>
+                            <button type="button" class="btn btn-success float-right">accepter</button>
                             </a>
                             <a href="{% url 'status_join' group.idGroup us.id 'decline' %}">
-                            <button type="button" class="btn btn-danger float-rigth">refuser</button>
+                            <button type="button" class="btn btn-danger float-right">refuser</button>
                             </a>
                         {% endif %}
                     </li>

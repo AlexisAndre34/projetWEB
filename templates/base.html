@@ -5,13 +5,12 @@
 <!-- CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link href="{% static 'css/modif.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-
 </head>
 
 <body class="body-cl">
  <nav class="navbar navbar-expand-md bg-dark navbar-dark">
   <!-- Brand -->
-  <a class="navbar-brand" href="{% url 'homepage' %}">POLYSHARE</a>
+  <a id="nav-title"class="navbar-brand" href="{% url 'homepage' %}">POLYSHARE</a>
   {% if user.is_authenticated %}
   <!-- Toggler/collapsibe Button -->
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -25,17 +24,11 @@
         <a class="nav-link" href="{% url 'my_account' %}">{{user.username}}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" href="{% url 'logout' %}">Deconnexion</a>
       </li> 
     </ul>
   </div>
-  <form class="form-inline">
-    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-  </form>
+  
   {% else %}
   <!-- Toggler/collapsibe Button -->
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">

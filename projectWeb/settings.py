@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -144,7 +143,6 @@ DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 GS_BUCKET_NAME = 'django-polyshare-file'
 GS_FILE_OVERWRITE = False
 
-django_heroku.settings(locals())
 
 
 #heroku config:set DJANGO_SETTINGS_MODULE=mysite.settings --account <your account name>   : add this when heroku

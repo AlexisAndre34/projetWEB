@@ -116,7 +116,7 @@ def create_publication(request, idG):
 #create a comment for a publication in a group
 
     #-------READ VIEWS--------
-
+@login_required
 def read_group(request,idG,idP):
     group = get_object_or_404(Group,idGroup=idG)
     publicationList = Publication.objects.filter(idGroupPubli=idG).order_by('-datePublished')      #get all the publications of the group
@@ -160,7 +160,7 @@ def read_group(request,idG,idP):
 
     
     return render(request, 'read/group.html', locals())
-
+@login_required
 def read_myaccount(request):
     us = User.objects.get(id=request.user.id)
     account = Account.objects.get(idAccount=request.user.id)
@@ -192,6 +192,7 @@ def update_account(request):
         date = str(account.birthDate.year)+"-"+str(account.birthDate.month)+"-"+str(account.birthDate.day)
     return render(request, 'update/updateAccount.html', locals())
 
+@login_required
 def update_group(request,idG):
     group = Group.objects.get(idGroup=idG)
     if request.method == 'POST':
@@ -205,6 +206,7 @@ def update_group(request,idG):
         form = UpdateGroupForm(initial=data)
     return render(request,'update/updateGroup.html', locals())
 
+@login_required
 def update_publication(request,idG,idP):
     publication = get_object_or_404(Publication, idGroupPubli=idG, idPubli=idP)
     if request.method == 'POST':
@@ -249,6 +251,7 @@ def list_groups(request,idG=None):
     return render(request, 'list/listGroups.html', locals())
 
 #fonction pour remplace le forme
+@login_required
 def join_group(request, idG):
     account = Account.objects.get(idAccount = request.user.id)
     group = Group.objects.get(idGroup=idG)
@@ -305,6 +308,7 @@ def delete_group(request, idG):
 
     return redirect('list_group_by_user', request.user.id)
 
+@login_required
 def delete_member(request,idG,idM):
     #check if the actuel user is the manager
     group = get_object_or_404(Group, idGroup=idG)
@@ -336,6 +340,7 @@ def status_join(request,idG,idA,operation):
         join.delete()
     return redirect('list_join', idG)
 
+@login_required
 def delete_publication(request,idG,idP):
     #get the user who created the publication
     usPubli = get_object_or_404(Publication, idPubli=idP)

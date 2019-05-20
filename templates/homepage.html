@@ -58,20 +58,18 @@
         </div>
     </div>
     {% else %}
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div  class="text-center">
-                        <a href="{% url 'login'%}">
-                            <button type="button" class="btn btn-primary mt-5 mb-3">Connexion</button>
+     <div id="container" class="container">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3 text-center"><br>
+               <a href="{% url 'login'%}">
+                            <button type="button" class="btn btn-primary mr-2">Connexion</button>
                         </a>
                         <a href="{% url 'signup'%}">
-                            <button type="button" class="btn btn-primary mt-5 mb-3">Creer un compte</button>
+                            <button type="button" class="btn btn-primary">Creer un compte</button>
                         </a>
-                    </div>
-                </div>               
             </div>
         </div>
+    </div>
         
     {% endif %}
 {% endblock %} 
